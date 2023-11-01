@@ -20,7 +20,7 @@ jobs:
 
       - name: Install Playwright and Dependencies
         run: |
-          npm install playwright
+          npx playwright install --with-deps chromium firefox
 
       - name: Install Allure Command Line and Allure-Playwright adapter
         run: |
