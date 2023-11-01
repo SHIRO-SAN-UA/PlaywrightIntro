@@ -20,7 +20,7 @@ jobs:
 
       - name: Install Playwright and Dependencies
         run: |
-          npm init playwright@latest
+          npm install playwright
 
       - name: Install Allure Command Line and Allure-Playwright adapter
         run: |
