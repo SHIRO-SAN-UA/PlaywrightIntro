@@ -48,7 +48,7 @@ jobs:
       - name: Create Allure Test Report
         run: |
           npx allure generate allure-results --clean -o allure-report
-          
+
       - name: Set Git User
         run: |
           git config --global user.email "serge.karpov@gmail.com"
@@ -60,6 +60,8 @@ jobs:
           git add -A
           git commit -m "Add Allure report"
           git push origin allure-report
+        env:
+            PAT: ${{ secrets.MY_SECRET_CAT }}
 
       - name: Configure GitHub Pages
         run: |
