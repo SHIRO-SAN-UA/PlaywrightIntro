@@ -31,9 +31,9 @@ jobs:
 
       - name: Copy Allure Report Data
         run: |
-          mkdir -p allure-results
-          cp -r ./allure-results $GITHUB_WORKSPACE/allure-results
-
+          mkdir -p $GITHUB_WORKSPACE/allure-results
+          cp -r ./allure-results/* $GITHUB_WORKSPACE/allure-results
+      
       - name: Create Allure Test Report
         run: |
           npx allure generate allure-results --clean -o allure-report
