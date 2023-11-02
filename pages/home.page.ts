@@ -1,7 +1,13 @@
-import { Page } from 'playwright';
+import { Page, } from 'playwright';
 
 export class HomePage {
-  private page: Page;
+  protected page: Page;
+
+  // Define selectors for elements at the home page
+  get registrationPageLink() {
+    return this.page.locator('.register');
+  }
+
 
   constructor(page: Page) {
     this.page = page;
@@ -12,13 +18,18 @@ export class HomePage {
     await this.page.goto('https://www.redmine.org/');
   }
 
+  async navigateToLoginPage() {
+    // Navigate to the Redmine login page
+    await this.page.goto('https://www.redmine.org/login');
+  }
+
   async getTitle() {
-    // Get the title of the Redmine homepage
+    // Get the title of the page
     return this.page.title();
   }
 
-  async clickLink(linkText: string) {
-    // Click a link with the specified linkText
-    await this.page.click(`text=${linkText}`);
+  async clickRegistrationLink() {
+    // Click the Registration Page link 
+    await this.registrationPageLink.click();
   }
 }
