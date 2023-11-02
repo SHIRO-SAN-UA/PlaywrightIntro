@@ -7,7 +7,6 @@ test('Register existing user', async ({ page }) => {
 // Create an instance of the RegistrationPage and HomePage and pass the current page
 const registrationPage = new RegistrationPage(page);
 const homePage = new HomePage(page);
-const loginPage = new LoginPage(page);
 await homePage.navigateToHomePage();
 
 //Click Registration link
