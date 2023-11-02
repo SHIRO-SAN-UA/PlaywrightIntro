@@ -1,7 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { HomePage } from '../pages/home.page';
 import { RegistrationPage } from '../pages/registration.page';
-import { LoginPage } from '../pages/login.page';
 
 test('Register existing user', async ({ page }) => {
 // Create an instance of the RegistrationPage and HomePage and pass the current page
