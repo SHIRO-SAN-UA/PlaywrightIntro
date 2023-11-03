@@ -14,10 +14,3 @@ run tests:
 
 generate Allure report:
     npx allure serve allure-results
-
-
-Now i guess ill start writing some actual tests
-Well, before that I want to test GitHub Actions adn actually try to push from the machine, where all 
-Playwright browsers actually work with a commit to this readme.
-Im struggling with a token
-added read/write permission to actions

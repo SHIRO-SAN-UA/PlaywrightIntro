@@ -1,5 +1,17 @@
 import { defineConfig, devices } from '@playwright/test';
 import { testPlanFilter } from "allure-playwright/dist/testplan";
+import { ReporterDescription } from '@playwright/test';
+
+
+const getReporters = () => {
+  const reporters: ReporterDescription[] = [
+      ["allure-playwright"], // Add the Allure reporter configuration
+  ];
+  if (process.env.CI) {
+      reporters.push(["github"]); // Add the GitHub reporter configuration for CI environments
+  }
+  return reporters;
+};
 
 /**
  * Read environment variables from file.
@@ -23,8 +35,10 @@ export default defineConfig({
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   // ...
   grep: testPlanFilter(),
-  reporter: [["line"], ["allure-playwright"]],
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+  reporter: getReporters(),
+  // 'github' for GitHub Actions CI to generate annotations, plus a concise 'dot'
+  // default 'list' when running locally
+    /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     // baseURL: 'http://127.0.0.1:3000',
