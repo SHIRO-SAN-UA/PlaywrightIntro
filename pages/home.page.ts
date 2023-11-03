@@ -8,6 +8,14 @@ export class HomePage {
     return this.page.locator('.register');
   }
 
+  get loginPageLink() {
+    return this.page.locator ('.login');
+  }
+
+  get loggedMessageBox() {
+    return this.page.locator ('#loggedas');
+  }
+
 
   constructor(page: Page) {
     this.page = page;
@@ -31,5 +39,10 @@ export class HomePage {
   async clickRegistrationLink() {
     // Click the Registration Page link 
     await this.registrationPageLink.click();
+  }
+
+  async clickLoginLink() {
+    //Click login page link
+    await this.loginPageLink.click();
   }
 }
