@@ -9,6 +9,9 @@ install playwright and deps:
 install Allure report and dependencies with:
     npm install allure-commandline allure-playwright --save-dev
 
+install Faker - random data generator
+    npm install @faker-js/faker --save-dev
+
 run tests:
     npx playwright test
 
