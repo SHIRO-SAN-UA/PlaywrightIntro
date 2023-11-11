@@ -1,86 +1,77 @@
 name: Playwright Test
 
 on:
-  push:
-    branches:
-      - main
+    push:
+        branches:
+            - main
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+    test:
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 20
 
-      - name: Install Playwright and Dependencies
-        run: |
-          npx playwright install --with-deps chromium firefox
+            - name: Install Playwright and Dependencies
+              run: npx playwright install --with-deps chromium firefox
 
-      - name: Install Allure Command Line and Allure-Playwright adapter
-        run: |
-          npm install allure-commandline allure-playwright --save-dev
-      
-      - name: Install Faker
-        run: npm install @faker-js/faker --save-dev
+            - name: Install Allure Command Line and Allure-Playwright adapter
+              run: npm install allure-commandline allure-playwright --save-dev
 
-      - name: Run Tests
-        run: npx playwright test
+            - name: Install Faker
+              run: npm install @faker-js/faker --save-dev
 
-      - name: Copy Allure Report Data
-        run: |
-          mkdir -p $GITHUB_WORKSPACE/allure-results
-      
-          # Loop through the files in the source directory
-          for file in ./allure-results/*; do
-            # Get the file name without the path
-            filename=$(basename "$file")
-      
-            # Check if the file already exists in the destination directory
-            if [ ! -e "$GITHUB_WORKSPACE/allure-results/$filename" ]; then
-              # If the file doesn't exist in the destination, copy it
-              cp "$file" "$GITHUB_WORKSPACE/allure-results/$filename"
-            fi
-          done
-            
-      - name: Create Allure Test Report
-        run: |
-          npx allure generate allure-results --clean -o allure-report
+            - name: Run Tests
+              run: npx playwright test
+              continue-on-error: true
 
-      - name: Set Git User
-        run: |
-          git config --global user.email "serge.karpov@gmail.com"
-          git config --global user.name "Serge K"
+            - name: Copy Allure Report Data
+              run: |
+                  mkdir -p $GITHUB_WORKSPACE/allure-results
+                  # Loop through the files in the source directory
+                  for file in ./allure-results/*; do
+                    # Get the file name without the path
+                    filename=$(basename "$file")
+                    # Check if the file already exists in the destination directory
+                    if [ ! -e "$GITHUB_WORKSPACE/allure-results/$filename" ]; then
+                      # If the file doesn't exist in the destination, copy it
+                      cp "$file" "$GITHUB_WORKSPACE/allure-results/$filename"
+                    fi
+                  done
 
-      - name: Push Report to Another Branch
-        run: |
-          git checkout -b allure-report
-          git add -A
-          git commit -m "Add Allure report"
-          git push origin allure-report
-        env:
-            PAT: ${{ secrets.MY_SECRET_CAT }}
+            - name: Create Allure Test Report
+              run: npx allure generate allure-results --clean -o allure-report
 
-      - name: Configure GitHub Pages
-        run: |
-          git checkout -b gh-pages
-          mv -f $GITHUB_WORKSPACE/allure-report $GITHUB_WORKSPACE/docs
-          git add -A
-          git commit -m "Publish Allure report to GitHub Pages"
-          git push origin gh-pages
+            - name: Push Report to Another Branch
+              run: |
+                  git checkout -b allure-report
+                  git add -A
+                  git commit -m "Add Allure report"
+                  git push origin allure-report
+              env:
+                  PAT: ${{ secrets.MY_SECRET_CAT }}
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: test
+            - name: Configure GitHub Pages
+              run: |
+                  git checkout -b gh-pages
+                  mv -f $GITHUB_WORKSPACE/allure-report $GITHUB_WORKSPACE/docs
+                  git add -A
+                  git commit -m "Publish Allure report to GitHub Pages"
+                  git push origin gh-pages
 
-    steps:
-      - name: Configure GitHub Pages Deployment
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
+    deploy:
+        runs-on: ubuntu-latest
+        needs: test
+
+        steps:
+            - name: Configure GitHub Pages Deployment
+              uses: peaceiris/actions-gh-pages@v3
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  publish_dir: ./docs

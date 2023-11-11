@@ -2,6 +2,13 @@
   "name": "redmine",
   "version": "1.0.0",
   "description": "",
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 4,
+    "printWidth": 120,
+    "semi": true,
+    "singleQuote": false
+},
   "main": "index.js",
   "scripts": {},
   "keywords": [],
