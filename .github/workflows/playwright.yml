@@ -59,7 +59,7 @@ jobs:
                     git add -A
                     git commit -m "Add Allure report"
                     git push origin allure-report
-                env:
+              env:
                     PAT: ${{ secrets.MY_SECRET_CAT }}
 
             - name: Configure GitHub Pages
