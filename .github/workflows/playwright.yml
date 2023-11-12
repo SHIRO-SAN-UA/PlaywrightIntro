@@ -61,11 +61,22 @@ jobs:
 
             - name: Configure GitHub Pages
               run: |
-                  git checkout -b gh-pages
+                  # Create or switch to the gh-pages branch
+                  git checkout -B gh-pages
+                  
+                  # Remove existing content (if any)
+                  git rm -r .
+                  
+                  # Move the allure-report directory to docs
                   mv -f $GITHUB_WORKSPACE/allure-report $GITHUB_WORKSPACE/docs
+                  
+                  # Commit the changes
                   git add -A
                   git commit -m "Publish Allure report to GitHub Pages"
-                  git push origin gh-pages
+                  
+                  # Push the changes to the gh-pages branch
+                  git push --force origin gh-pages
+                  
 
     deploy:
         runs-on: ubuntu-latest
