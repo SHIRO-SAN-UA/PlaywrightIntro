@@ -55,7 +55,7 @@ jobs:
           git checkout -b allure-report
           git add -A
           git commit -m "Add Allure report"
-          git push --set-upstream origin allure-report
+          git push --force origin allure-report
         env:
           PAT: ${{ secrets.MY_SECRET_CAT }}
 
