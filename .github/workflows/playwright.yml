@@ -56,12 +56,13 @@ jobs:
             - name: Push Report to Another Branch
               run: |
                 git checkout -b allure-report
-                git pull origin allure-report --allow-unrelated-histories
+                git pull origin allure-report --rebase
                 git add -A
                 git commit -m "Add Allure report"
                 git push --force-with-lease origin allure-report
               env:
                 PAT: ${{ secrets.MY_SECRET_CAT }}
+            
             
             
 
