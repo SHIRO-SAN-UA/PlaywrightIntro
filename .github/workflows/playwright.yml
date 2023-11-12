@@ -1,50 +1,90 @@
-- name: Set up Node.js
-  uses: actions/setup-node@v3
-  with:
-    node-version: 20
+name: Playwright Test
 
-- name: Install Playwright and Dependencies
-  run: npx playwright install --with-deps chromium firefox
+on:
+  push:
+    branches:
+      - main 
 
-- name: Install Allure Command Line and Allure-Playwright adapter
-  run: npm install allure-commandline allure-playwright --save-dev
+jobs:
+  test:
+    runs-on: ubuntu-latest
 
-- name: Install Faker
-  run: npm install @faker-js/faker --save-dev
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-- name: Copy Allure Report Data
-  run: |
-    mkdir -p $GITHUB_WORKSPACE/allure-report
-    cp -r $GITHUB_WORKSPACE/allure-results/* $GITHUB_WORKSPACE/allure-report/
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
 
-- name: Set Git User
-  run: |
-    git config --global user.email "serge.karpov@gmail.com"
-    git config --global user.name "SHIRO SAN"
+      - name: Install Playwright and Dependencies
+        run: npx playwright install --with-deps chromium firefox
 
-- name: Push Report to Another Branch
-  run: |
-    git checkout -b allure-report
-    git add -A
-    git commit -m "Add Allure report"
-    git push --force origin allure-report
-  env:
-    PAT: ${{ secrets.MY_SECRET_CAT }}
+      - name: Install Allure Command Line and Allure-Playwright adapter
+        run: npm install allure-commandline allure-playwright --save-dev
 
-- name: Configure GitHub Pages
-  run: |
-    # Create or switch to the gh-pages branch
-    git checkout -b gh-pages
+      - name: Install Faker
+        run: npm install @faker-js/faker --save-dev
 
-    # Remove existing content (if any)
-    git rm -r .
+      - name: Run Tests
+        run: npx playwright test
+        continue-on-error: true
 
-    # Move the allure-report directory to docs
-    mv -f $GITHUB_WORKSPACE/allure-report $GITHUB_WORKSPACE/docs
+      - name: Set Git User
+        run: |
+          git config --global user.email "serge.karpov@gmail.com"
+          git config --global user.name "SHIRO SAN"
 
-    # Commit the changes
-    git add -A
-    git commit -m "Publish Allure report to GitHub Pages"
+      - name: Copy Allure Report Data
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/allure-report
+          # Loop through the files in the source directory
+          for file in ./allure-results/*; do
+          # Get the file name without the path
+          filename=$(basename "$file")
+          # Check if the file already exists in the destination directory
+          if [ ! -e "$GITHUB_WORKSPACE/allure-report/$filename" ]; then
+          # If the file doesn't exist in the destination, copy it
+          cp "$file" "$GITHUB_WORKSPACE/allure-report/$filename"
+          fi
+          done
+        
 
-    # Push the changes to the gh-pages branch
-    git push --force origin gh-pages
+      - name: Push Report to Another Branch
+        run: |
+          git checkout -b allure-report
+          git add -A
+          git commit -m "Add Allure report"
+          git push --force origin allure-report
+        env:
+          PAT: ${{ secrets.MY_SECRET_CAT }}
+
+      - name: Configure GitHub Pages
+        run: |
+          # Create or switch to the gh-pages branch
+          git checkout -b gh-pages
+
+          # Remove existing content (if any)
+          git rm -r .
+
+          # Move the allure-report directory to docs
+          mv -f $GITHUB_WORKSPACE/allure-report $GITHUB_WORKSPACE/docs
+
+          # Commit the changes
+          git add -A
+          git commit -m "Publish Allure report to GitHub Pages"
+
+          # Push the changes to the gh-pages branch
+          git push --force origin gh-pages
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Configure GitHub Pages Deployment
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
