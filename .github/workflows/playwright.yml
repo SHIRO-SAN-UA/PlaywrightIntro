@@ -22,7 +22,7 @@ jobs:
         run: npx playwright install --with-deps chromium firefox
 
       - name: Install Allure Command Line and Allure-Playwright adapter
-        run: npm install allure-commandline allure-playwright --save-dev
+        run: npm install --save-dev allure-commandline allure-playwright
 
       - name: Install Faker
         run: npm install @faker-js/faker --save-dev
@@ -61,7 +61,7 @@ jobs:
 
       - name: Generate Allure Report
         run: |
-          allure generate --clean
+          npx allure generate --clean -o allure-report
           mv allure-report $GITHUB_WORKSPACE/allure-report
 
       - name: Commit and Push Allure Report

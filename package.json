@@ -20,5 +20,8 @@
     "@types/node": "^20.8.9",
     "allure-commandline": "^2.24.1",
     "allure-playwright": "^2.9.2"
+  },
+  "dependencies": {
+    "save-dev": "^0.0.1-security"
   }
 }
