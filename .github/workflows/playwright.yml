@@ -62,7 +62,7 @@ jobs:
           # Remove existing content (if any)
           git rm -r .
 
-          # Move the allure-report directory to root
+          # Move the allure-report directory contents to root
           mv -f $GITHUB_WORKSPACE/allure-report/* .
 
           # Commit the changes
