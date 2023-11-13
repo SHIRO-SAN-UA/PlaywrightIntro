@@ -27,6 +27,10 @@ jobs:
       - name: Install Faker
         run: npm install @faker-js/faker --save-dev
 
+      - name: Generate Timestamp for Unique Folder Name
+        id: timestamp
+        run: echo "::set-output name=timestamp::$(date -u +"%Y%m%d%H%M%S")"
+
       - name: Run Tests
         run: npx playwright test
         continue-on-error: true
@@ -36,44 +40,32 @@ jobs:
           git config --global user.email "serge.karpov@gmail.com"
           git config --global user.name "SHIRO SAN"
 
-      - name: Copy Allure Report Data
-        run: |
-          mkdir -p $GITHUB_WORKSPACE/allure-report
-          # Loop through the files in the source directory
-          for file in ./allure-results/*; do
-            # Get the file name without the path
-            filename=$(basename "$file")
-            # Check if the file already exists in the destination directory
-            if [ ! -e "$GITHUB_WORKSPACE/allure-report/$filename" ]; then
-              # If the file doesn't exist in the destination, copy it
-              cp "$file" "$GITHUB_WORKSPACE/allure-report/$filename"
-            fi
-          done
+      - name: Create Allure Results Folder
+        run: mkdir -p $GITHUB_WORKSPACE/allure-results/${{ steps.timestamp.outputs.timestamp }}
 
-      - name: Commit and Push Allure Report to Allure-Report Branch
+      - name: Copy Results to Unique Folder
+        run: cp -r ./allure-results/* $GITHUB_WORKSPACE/allure-results/${{ steps.timestamp.outputs.timestamp }}
+
+      - name: Generate Allure Report
+        run: |
+          npx allure generate --clean
+          npx allure open
+
+      - name: Commit and Push Allure Report
         run: |
           git checkout -b allure-report
           git add -A
-          git commit -m "Add Allure report"
+          git commit -m "Add Allure report with historical data"
           git push --force origin allure-report
-        env:
-          PAT: ${{ secrets.MY_SECRET_CAT }}
 
-      - name: Configure GitHub Pages on Allure-Report Branch
+      - name: Configure GitHub Pages for Allure Report
         run: |
           git checkout allure-report
-      
-          # Remove existing content (if any)
           git rm -r .
-      
-          # Copy the allure-report directory contents to root
-          cp -r $GITHUB_WORKSPACE/allure-report/* .
-      
-          # Commit the changes
+          mv -f $GITHUB_WORKSPACE/allure-report/* .
           git add -A
           git commit -m "Publish Allure report to GitHub Pages"
           git push --force origin allure-report
-        
 
   deploy:
     runs-on: ubuntu-latest
@@ -84,4 +76,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
+          publish_dir: ./ # Assuming GitHub Pages is configured in the allure-report branch
