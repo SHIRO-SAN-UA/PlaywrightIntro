@@ -41,7 +41,6 @@ jobs:
           git checkout -b allure-report
           git push --set-upstream origin allure-report
           
-
       - name: Copy Allure Report Data
         run: |
           mkdir -p $GITHUB_WORKSPACE/allure-report
