@@ -22,10 +22,9 @@ jobs:
         run: npx playwright install --with-deps chromium firefox
 
       - name: Install Allure Command Line and Allure-Playwright adapter
-        run: npm install --save-dev allure-commandline allure-playwright
-
-      - name: Install Faker
-        run: npm install @faker-js/faker --save-dev
+        run: |
+          npm install -g allure-commandline
+          npm install --save-dev allure-playwright
 
       - name: Generate Timestamp for Unique Folder Name
         id: timestamp
@@ -61,8 +60,7 @@ jobs:
 
       - name: Generate Allure Report
         run: |
-          npx allure generate --clean -o allure-report
-          mv allure-report $GITHUB_WORKSPACE/allure-report
+          npx allure generate --clean -o $GITHUB_WORKSPACE/allure-report
 
       - name: Commit and Push Allure Report
         run: |
