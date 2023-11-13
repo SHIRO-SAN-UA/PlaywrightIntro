@@ -3,7 +3,7 @@ name: Playwright Test
 on:
   push:
     branches:
-      - main 
+      - main
 
 jobs:
   test:
@@ -36,12 +36,24 @@ jobs:
           git config --global user.email "serge.karpov@gmail.com"
           git config --global user.name "SHIRO SAN"
 
+      - name: Configure GitHub Pages
+        run: |
+          # Create or switch to the gh-pages branch
+          git checkout -B gh-pages
+
+          # Remove existing content (if any)
+          git rm -r .
+
+          # Commit the changes
+          git commit -m "Initial commit for GitHub Pages"
+          
+          # Push the changes to the gh-pages branch
+          git push --force origin gh-pages
+
       - name: Copy Allure Report Data
         run: |
           mkdir -p $GITHUB_WORKSPACE/allure-report
-          cp -r ./allure-results/* $GITHUB_WORKSPACE/allure-report/
-          ls -R $GITHUB_WORKSPACE/allure-report
-        
+          cp -r allure-results/* $GITHUB_WORKSPACE/allure-report
 
       - name: Push Report to Another Branch
         run: |
@@ -51,27 +63,6 @@ jobs:
           git push --force origin allure-report
         env:
           PAT: ${{ secrets.MY_SECRET_CAT }}
-
-      - name: Configure GitHub Pages
-        run: |
-          # Create or switch to the gh-pages branch
-          git checkout -b gh-pages
-      
-          # Remove existing content (if any)
-          git rm -r .
-      
-          # Move the allure-report directory to docs
-          mv -f $GITHUB_WORKSPACE/allure-report $GITHUB_WORKSPACE/docs
-      
-          # Commit the changes
-          git add -A
-          git commit -m "Publish Allure report to GitHub Pages"
-      
-          # Push the changes to the gh-pages branch
-          git push --force origin gh-pages
-        
-        
-        
 
   deploy:
     runs-on: ubuntu-latest
