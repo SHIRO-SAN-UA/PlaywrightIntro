@@ -40,6 +40,7 @@ jobs:
         run: |
           git checkout -b allure-report
           git push --set-upstream origin allure-report
+          
 
       - name: Copy Allure Report Data
         run: |
