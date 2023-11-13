@@ -62,17 +62,18 @@ jobs:
       - name: Configure GitHub Pages on Allure-Report Branch
         run: |
           git checkout allure-report
-
+      
           # Remove existing content (if any)
           git rm -r .
-
-          # Move the allure-report directory contents to root
-          mv -f $GITHUB_WORKSPACE/allure-report/* .
-
+      
+          # Copy the allure-report directory contents to root
+          cp -r $GITHUB_WORKSPACE/allure-report/* .
+      
           # Commit the changes
           git add -A
           git commit -m "Publish Allure report to GitHub Pages"
           git push --force origin allure-report
+        
 
   deploy:
     runs-on: ubuntu-latest
