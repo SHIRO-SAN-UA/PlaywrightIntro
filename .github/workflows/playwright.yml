@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 20
+          node-version: 14
 
       - name: Install Playwright and Dependencies
         run: npx playwright install --with-deps chromium firefox
@@ -39,41 +39,3 @@ jobs:
         run: |
           git config --global user.email "serge.karpov@gmail.com"
           git config --global user.name "SHIRO SAN"
-
-      - name: Create Allure Results Folder
-        run: mkdir -p $GITHUB_WORKSPACE/allure-results/${{ steps.timestamp.outputs.timestamp }}
-
-      - name: Copy Results to Unique Folder
-        run: cp -r ./allure-results/* $GITHUB_WORKSPACE/allure-results/${{ steps.timestamp.outputs.timestamp }}
-
-      - name: Generate Allure Report
-        run: |
-          npx allure generate --clean
-          npx allure open
-
-      - name: Commit and Push Allure Report
-        run: |
-          git checkout -b allure-report
-          git add -A
-          git commit -m "Add Allure report with historical data"
-          git push --force origin allure-report
-
-      - name: Configure GitHub Pages for Allure Report
-        run: |
-          git checkout allure-report
-          git rm -r .
-          mv -f $GITHUB_WORKSPACE/allure-report/* .
-          git add -A
-          git commit -m "Publish Allure report to GitHub Pages"
-          git push --force origin allure-report
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: test
-
-    steps:
-      - name: Configure GitHub Pages Deployment
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./ # Assuming GitHub Pages is configured in the allure-report branch
