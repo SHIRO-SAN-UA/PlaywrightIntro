@@ -41,15 +41,14 @@ jobs:
           mkdir -p $GITHUB_WORKSPACE/allure-report
           # Loop through the files in the source directory
           for file in ./allure-results/*; do
-          # Get the file name without the path
-          filename=$(basename "$file")
-          # Check if the file already exists in the destination directory
-          if [ ! -e "$GITHUB_WORKSPACE/allure-report/$filename" ]; then
-          # If the file doesn't exist in the destination, copy it
-          cp "$file" "$GITHUB_WORKSPACE/allure-report/$filename"
-          fi
+            # Get the file name without the path
+            filename=$(basename "$file")
+            # Check if the file already exists in the destination directory
+            if [ ! -e "$GITHUB_WORKSPACE/allure-report/$filename" ]; then
+              # If the file doesn't exist in the destination, copy it
+              cp "$file" "$GITHUB_WORKSPACE/allure-report/$filename"
+            fi
           done
-        
 
       - name: Push Report to Another Branch
         run: |
@@ -63,7 +62,7 @@ jobs:
       - name: Configure GitHub Pages
         run: |
           # Create or switch to the gh-pages branch
-          git checkout -b gh-pages
+          git checkout -B gh-pages
 
           # Remove existing content (if any)
           git rm -r .
