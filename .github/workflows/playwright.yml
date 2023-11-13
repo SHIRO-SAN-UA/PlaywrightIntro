@@ -54,16 +54,10 @@ jobs:
 
       - name: Configure GitHub Pages
         run: |
-          # Switch to the main branch
-          git checkout main
+          # Create or switch to the gh-pages branch
+          git checkout -b gh-pages
       
-          # Create the gh-pages branch if it doesn't exist
-          git branch gh-pages || true
-      
-          # Switch to the gh-pages branch
-          git checkout gh-pages
-      
-          # Clear existing content in the gh-pages branch
+          # Remove existing content (if any)
           git rm -r .
       
           # Move the allure-report directory to docs
@@ -75,6 +69,7 @@ jobs:
       
           # Push the changes to the gh-pages branch
           git push --force origin gh-pages
+        
         
         
 
