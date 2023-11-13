@@ -55,8 +55,11 @@ jobs:
           # Switch to the main branch
           git checkout main
       
-          # Create or switch to the gh-pages branch
-          git checkout gh-pages || git checkout -b gh-pages
+          # Create the gh-pages branch if it doesn't exist
+          git branch gh-pages || true
+      
+          # Switch to the gh-pages branch
+          git checkout gh-pages
       
           # Clear existing content in the gh-pages branch
           git rm -r .
@@ -70,6 +73,7 @@ jobs:
       
           # Push the changes to the gh-pages branch
           git push --force origin gh-pages
+        
         
 
   deploy:
