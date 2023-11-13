@@ -39,44 +39,33 @@ jobs:
       - name: Copy Allure Report Data
         run: |
           mkdir -p $GITHUB_WORKSPACE/allure-report
-          # Loop through the files in the source directory
           for file in ./allure-results/*; do
-            # Get the file name without the path
             filename=$(basename "$file")
-            # Check if the file already exists in the destination directory
             if [ ! -e "$GITHUB_WORKSPACE/allure-report/$filename" ]; then
-              # If the file doesn't exist in the destination, copy it
               cp "$file" "$GITHUB_WORKSPACE/allure-report/$filename"
             fi
           done
 
-      - name: Commit changes to package.json
+      - name: Push Report to Another Branch
         run: |
-          git add package.json
-          git commit -m "Update package.json"
-          git push
+          git checkout -b allure-report
+          git add -A
+          git commit -m "Add Allure report"
+          git push --force origin allure-report
+        env:
+          PAT: ${{ secrets.MY_SECRET_CAT }}
 
-      - name: Configure GitHub Pages
+      - name: Configure GitHub Pages on Allure-Report Branch
         run: |
-          # Create or switch to the gh-pages branch
-          git checkout -B gh-pages
+          git checkout allure-report
 
           # Remove existing content (if any)
           git rm -r .
 
+          # Move the allure-report directory to root
+          mv -f $GITHUB_WORKSPACE/allure-report/* .
+
           # Commit the changes
+          git add -A
           git commit -m "Publish Allure report to GitHub Pages"
-
-          # Push the changes to the gh-pages branch
-          git push --force origin gh-pages
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: test
-
-    steps:
-      - name: Configure GitHub Pages Deployment
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
+          git push --force origin allure-report
