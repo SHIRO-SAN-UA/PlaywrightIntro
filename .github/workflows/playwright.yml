@@ -39,7 +39,9 @@ jobs:
       - name: Copy Allure Report Data
         run: |
           mkdir -p $GITHUB_WORKSPACE/allure-report
-          cp -r ./allure-results/* $GITHUB_WORKSPACE/allure-report/ 
+          cp -r ./allure-results/* $GITHUB_WORKSPACE/allure-report/
+          ls -R $GITHUB_WORKSPACE/allure-report
+        
 
       - name: Push Report to Another Branch
         run: |
