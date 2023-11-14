@@ -13,6 +13,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set Git User
+        run: |
+          git config --global user.email "serge.karpov@gmail.com"
+          git config --global user.name "Serge K"
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -30,11 +35,6 @@ jobs:
       - name: Generate Timestamp for Unique Folder Name
         id: timestamp
         run: echo "TIMESTAMP=$(date -u +"%Y%m%d%H%M%S")" >> $GITHUB_ENV
-
-      - name: Set Git User
-        run: |
-          git config --global user.email "serge.karpov@gmail.com"
-          git config --global user.name "SHIRO SAN"
 
       - name: Create and Switch to allure-report Branch
         run: |
@@ -54,5 +54,7 @@ jobs:
         run: |
           git add -A
           git commit -m "Add Allure report"
-          git pull origin allure-report --allow-unrelated-histories  # Pull changes from allure-report branch
+          git pull origin allure-report --allow-unrelated-histories
           git push --force origin allure-report
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
