@@ -24,9 +24,12 @@ jobs:
       - name: Install Allure Command Line and Allure-Playwright adapter
         run: npm install --save-dev allure-commandline allure-playwright
 
+      - name: Install Faker
+        run: npm install @faker-js/faker --save-dev
+
       - name: Generate Timestamp for Unique Folder Name
         id: timestamp
-        run: echo "::set-output name=timestamp::$(date -u +"%Y%m%d%H%M%S")"
+        run: echo "TIMESTAMP=$(date -u +"%Y%m%d%H%M%S")" >> $GITHUB_ENV
 
       - name: Set Git User
         run: |
@@ -44,17 +47,12 @@ jobs:
 
       - name: Generate Allure Report
         run: |
-          # Move the allure-results directory to a unique timestamped folder for historical data
-          mv allure-results $GITHUB_WORKSPACE/allure-reports/$timestamp
-
-          # Generate the Allure report
-          npx allure generate --clean -o allure-reports/$timestamp
-
-          # Move the updated allure-report directory back to the workspace
-          mv allure-reports/$timestamp $GITHUB_WORKSPACE/allure-reports/$timestamp
+          npx allure generate --clean -o allure-report-$GITHUB_RUN_NUMBER
+          mv allure-report-$GITHUB_RUN_NUMBER $GITHUB_WORKSPACE/allure-report
 
       - name: Commit and Push Allure Report
         run: |
           git add -A
           git commit -m "Add Allure report"
+          git pull origin allure-report --allow-unrelated-histories  # Pull changes from allure-report branch
           git push --force origin allure-report
