@@ -40,7 +40,9 @@ jobs:
         run: |
           git checkout -b allure-report
           git pull origin allure-report --allow-unrelated-histories
+          git merge origin/allure-report --allow-unrelated-histories
           git push --set-upstream origin allure-report
+      
       
 
       - name: Run Tests
