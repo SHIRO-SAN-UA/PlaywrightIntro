@@ -38,10 +38,11 @@ jobs:
 
       - name: Create and Switch to allure-report Branch
         run: |
-          git checkout -b allure-report
-          git pull origin allure-report --allow-unrelated-histories
+          git fetch origin allure-report:allure-report
+          git checkout allure-report
           git merge origin/allure-report --allow-unrelated-histories
           git push --set-upstream origin allure-report
+      
       
       
 
