@@ -39,7 +39,7 @@ jobs:
       - name: Create and Switch to allure-report Branch
         run: |
           git add -A
-          git commit -m "Committing local changes"
+          git commit -m "Add Allure report - $TIMESTAMP"
           git fetch origin allure-report:allure-report
           git checkout allure-report
           git merge origin/allure-report --allow-unrelated-histories
@@ -51,14 +51,14 @@ jobs:
 
       - name: Generate Allure Report
         run: |
-          npx allure generate --clean -o allure-report-$GITHUB_RUN_NUMBER
-          mv allure-report-$GITHUB_RUN_NUMBER $GITHUB_WORKSPACE/allure-report
+          npx allure generate --clean -o allure-report-$TIMESTAMP
+          mv allure-report-$TIMESTAMP $GITHUB_WORKSPACE/allure-report
 
       - name: Commit and Push Allure Report
         run: |
           git add -A
-          git commit -m "Add Allure report"
+          git commit -m "Update Allure report - $TIMESTAMP"
           git pull origin allure-report --allow-unrelated-histories
           git push origin allure-report
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
