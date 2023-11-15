@@ -38,13 +38,10 @@ jobs:
 
       - name: Create and Switch to allure-report Branch
         run: |
-          git add -A
-          git commit -m "Add Allure report - $TIMESTAMP"
-          git fetch origin allure-report:allure-report
+          git branch allure-report
           git checkout allure-report
-          git merge origin/allure-report --allow-unrelated-histories
-          git push --set-upstream origin allure-report
-      
+          git pull origin allure-report --allow-unrelated-histories
+
       - name: Run Tests
         run: npx playwright test
         continue-on-error: true
@@ -57,8 +54,7 @@ jobs:
       - name: Commit and Push Allure Report
         run: |
           git add -A
-          git commit -m "Update Allure report - $TIMESTAMP"
-          git pull origin allure-report --allow-unrelated-histories
-          git push origin allure-report
+          git commit -m "Add Allure report - $TIMESTAMP"
+          git push --set-upstream origin allure-report
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
