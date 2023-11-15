@@ -42,9 +42,6 @@ jobs:
           git checkout allure-report
           git merge origin/allure-report --allow-unrelated-histories
           git push --set-upstream origin allure-report
-      
-      
-      
 
       - name: Run Tests
         run: npx playwright test
@@ -60,6 +57,6 @@ jobs:
           git add -A
           git commit -m "Add Allure report"
           git pull origin allure-report --allow-unrelated-histories
-          git push --force origin allure-report
+          git push origin allure-report
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
