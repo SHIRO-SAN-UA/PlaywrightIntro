@@ -38,7 +38,10 @@ jobs:
 
       - name: Create and Switch to allure-report Branch
         run: git checkout -b allure-report
-
+      
+      - name: Push allure-report Branch to Remote
+        run: git push --set-upstream origin allure-report
+      
       # - name: Run Tests
       #   run: npx playwright test
       #   continue-on-error: true
