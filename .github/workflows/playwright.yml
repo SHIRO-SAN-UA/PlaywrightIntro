@@ -38,11 +38,13 @@ jobs:
 
       - name: Create and Switch to allure-report Branch
         run: |
-          git fetch origin allure-report:allure-report
-          git checkout allure-report
-          git merge origin/allure-report --allow-unrelated-histories
-          git push --set-upstream origin allure-report
-
+        git add -A
+        git commit -m "Committing local changes"
+        git fetch origin allure-report:allure-report
+        git checkout allure-report
+        git merge origin/allure-report --allow-unrelated-histories
+        git push --set-upstream origin allure-report
+      
       - name: Run Tests
         run: npx playwright test
         continue-on-error: true
