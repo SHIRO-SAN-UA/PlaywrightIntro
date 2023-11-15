@@ -5,7 +5,7 @@ Automation framework for [www.redmine.org](https://www.redmine.org/).
 
 ## Reports
 
-HTML Reporting system is hosted at [Github Pages] (https://shiro-san-ua.github.io/PlaywrightIntro/).
+HTML Reporting system is hosted at [Github Pages] (https://shiro-san-ua.github.io/PlaywrightIntro/allure-report/).
 
 ## Technologies Stack
 
