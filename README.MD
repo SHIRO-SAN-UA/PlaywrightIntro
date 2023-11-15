@@ -31,7 +31,7 @@ HTML Reporting system is hosted at [Github Pages] (https://shiro-san-ua.github.i
 For reference use [Playwright Docs](https://playwright.dev/docs/running-tests)
 
 1.  To run locally run `npx playwright test`.
-1.  To generate Allure report run `generate Allure report`.
+1.  To generate and open Allure report in your browser run `npx allure serve allure-results`.
 1.  Run `npx allure open` to view Allure report.
 
 
