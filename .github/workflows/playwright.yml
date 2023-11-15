@@ -57,3 +57,14 @@ jobs:
           git push origin allure-report
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy Allure Report to GitHub Pages
+        run: |
+          git checkout allure-report
+          mkdir -p docs
+          cp -R allure-report-$TIMESTAMP/* docs/
+          git add -A
+          git commit -m "Deploy Allure report to GitHub Pages - $TIMESTAMP"
+          git push origin allure-report
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
