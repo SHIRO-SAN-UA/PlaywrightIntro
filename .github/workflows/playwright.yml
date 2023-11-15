@@ -35,16 +35,16 @@ jobs:
       - name: Generate Timestamp for Unique Folder Name
         id: timestamp
         run: echo "TIMESTAMP=$(date -u +"%Y%m%d%H%M%S")" >> $GITHUB_ENV
+        
+      - name: Run Tests
+        run: npx playwright test
+        continue-on-error: true
 
       - name: Create and Switch to allure-report Branch
         run: git checkout -b allure-report
       
       - name: Push allure-report Branch to Remote
         run: git push --set-upstream origin allure-report
-      
-      # - name: Run Tests
-      #   run: npx playwright test
-      #   continue-on-error: true
 
 
       # - name: Generate Allure Report
