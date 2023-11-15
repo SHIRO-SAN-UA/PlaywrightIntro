@@ -40,6 +40,8 @@ jobs:
         run: |
           git fetch origin allure-report:allure-report
           git branch -a | grep remotes/origin/allure-report || git checkout -b allure-report
+          git add -A
+          git commit -m "Committing local changes"
           git pull --rebase origin allure-report
           git push --set-upstream origin allure-report
 
