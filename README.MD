@@ -47,4 +47,4 @@ For reference use [Playwright Docs](https://playwright.dev/docs/running-tests)
 All test cases should be coded inside the `tests` folder.
 Project build using [Page Object Model](https://playwright.dev/docs/pom). The main idea is to encapsulate logic into page classes and use the logic in the spec files to run the tests.
 
-For instance we defined the class LoginPage with locators and elements and reuse them in the code.
+For instance we define the class LoginPage with locators and elements and reuse them in the code.
