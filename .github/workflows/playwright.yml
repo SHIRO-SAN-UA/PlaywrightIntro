@@ -15,8 +15,8 @@ jobs:
 
       - name: Set Git User
         run: |
-          git config user.email "serge.karpov@gmail.com"
-          git config user.name "Serge K"
+          git config --global user.email "serge.karpov@gmail.com"
+          git config --global user.name "Serge K"
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -38,13 +38,13 @@ jobs:
 
       - name: Create and Switch to allure-report Branch
         run: |
-          git fetch origin allure-report:allure-report
-          git branch -a | grep remotes/origin/allure-report || git checkout -b allure-report
           git add -A
-          git commit -m "Committing local changes"
-          git pull --rebase origin allure-report
+          git commit -m "Add Allure report - $TIMESTAMP"
+          git fetch origin allure-report:allure-report
+          git checkout allure-report
+          git merge origin/allure-report --allow-unrelated-histories
           git push --set-upstream origin allure-report
-
+      
       - name: Run Tests
         run: npx playwright test
         continue-on-error: true
@@ -57,18 +57,8 @@ jobs:
       - name: Commit and Push Allure Report
         run: |
           git add -A
-          git commit -m "Add Allure report - $TIMESTAMP"
-          git push origin allure-report
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Deploy Allure Report to GitHub Pages
-        run: |
-          git checkout allure-report
-          mkdir -p docs
-          cp -R allure-report-$TIMESTAMP/* docs/
-          git add -A
-          git commit -m "Deploy Allure report to GitHub Pages - $TIMESTAMP"
+          git commit -m "Update Allure report - $TIMESTAMP"
+          git pull origin allure-report --allow-unrelated-histories
           git push origin allure-report
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
