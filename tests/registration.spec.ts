@@ -4,7 +4,7 @@ import { RegistrationPage } from "../pages/registration.page";
 import { LoginPage } from "../pages/login.page";
 
 test.describe("Registration", async () => {
-    test("Registration", async ({ page }) => {
+    test.("Registration", async ({ page }) => {
         //Create an instance of the RegistrationPage and HomePage and pass the current page
         const registrationPage = new RegistrationPage(page);
         const homePage = new HomePage(page);
