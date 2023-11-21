@@ -13,28 +13,30 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set Git User
-        run: |
-          git config --global user.email "serge.karpov@gmail.com"
-          git config --global user.name "Serge K"
+      # - name: Set Git User
+      #   run: |
+      #     git config --global user.email "serge.karpov@gmail.com"
+      #     git config --global user.name "Serge K"
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
 
+      - name: Install Dependencies
+        run: npm ci
+
       - name: Install Playwright and Dependencies
         run: npx playwright install --with-deps chromium firefox
 
-      - name: Install Allure Command Line and Allure-Playwright adapter
-        run: npm install --save-dev allure-commandline allure-playwright
 
-      - name: Install Faker
-        run: npm install @faker-js/faker --save-dev
 
-      - name: Generate Timestamp for Unique Folder Name
-        id: timestamp
-        run: echo "TIMESTAMP=$(date -u +"%Y%m%d%H%M%S")" >> $GITHUB_ENV
+      # - name: Install Faker
+      #   run: npm install @faker-js/faker --save-dev
+
+      # - name: Generate Timestamp for Unique Folder Name
+      #   id: timestamp
+      #   run: echo "TIMESTAMP=$(date -u +"%Y%m%d%H%M%S")" >> $GITHUB_ENV
         
       - name: Run Tests
         run: npx playwright test
@@ -45,8 +47,9 @@ jobs:
       
       
       - name: Generate Allure Report
-        run: |
-          npx allure generate --clean -o allure-report-$TIMESTAMP
+        run: npx allure generate --clean -o allure-report
+      # npx allure generate --clean -o allure-report-${{env.TIMESTAMP}}
+
       # mv allure-report-$TIMESTAMP $GITHUB_WORKSPACE/allure-report
 
       # - run: git push --set-upstream origin allure-report
@@ -66,7 +69,7 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.MY_SECRET_CAT}}
         with:
-          source-directory: 'allure-report-$TIMESTAMP'
+          source-directory: 'allure-report'
           destination-github-username: 'SHIRO-SAN-UA'
           destination-repository-name: 'PlaywrightIntro'
           user-email: serge.karpov@gmail.com
