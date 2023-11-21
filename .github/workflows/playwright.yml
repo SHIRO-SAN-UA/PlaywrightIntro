@@ -14,11 +14,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # - name: Set Git User
-      #   run: |
-      #     git config --global user.email "serge.karpov@gmail.com"
-      #     git config --global user.name "Serge K"
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -28,42 +23,14 @@ jobs:
         run: npm ci
 
       - name: Install Playwright and Dependencies
-        run: npx playwright install --with-deps chromium firefox
-
-
-
-      # - name: Install Faker
-      #   run: npm install @faker-js/faker --save-dev
-
-      # - name: Generate Timestamp for Unique Folder Name
-      #   id: timestamp
-      #   run: echo "TIMESTAMP=$(date -u +"%Y%m%d%H%M%S")" >> $GITHUB_ENV
+        run: npx playwright install --with-deps chromium
         
       - name: Run Tests
         run: npx playwright test
         continue-on-error: true
 
-      # - name: Create and Switch to allure-report Branch
-      #   run: git checkout -b allure-report
-      
-      
       - name: Generate Allure Report
         run: npx allure generate --clean -o allure-report
-      # npx allure generate --clean -o allure-report-${{env.TIMESTAMP}}
-
-      # mv allure-report-$TIMESTAMP $GITHUB_WORKSPACE/allure-report
-
-      # - run: git push --set-upstream origin allure-report
-      
-
-      # - name: Commit and Push Allure Report
-      #   run: |
-      #     git add -A
-      #     git commit -m "Update Allure report - $TIMESTAMP"
-      #     git pull origin allure-report --allow-unrelated-histories
-      #     git push origin allure-report
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Archive code coverage results
         uses: actions/upload-artifact@v3
@@ -72,23 +39,12 @@ jobs:
           path: allure-report
           retention-days: 3
 
-      # - name: Pushes to another repository
-      #   uses: cpina/github-action-push-to-another-repository@main
-      #   env:
-      #     API_TOKEN_GITHUB: ${{ secrets.MY_SECRET_CAT}}
-      #   with:
-      #     source-directory: 'allure-report'
-      #     destination-github-username: 'SHIRO-SAN-UA'
-      #     destination-repository-name: 'PlaywrightIntro'
-      #     user-email: serge.karpov@gmail.com
-      #     target-branch: allure-report
-
       - name: Test marketplace action
         uses: simple-elf/allure-report-action@master
         if: always()
         id: allure-report
         with:
-          allure_results: allure-results
+          allure_results: build/allure-results
           gh_pages: allure-report
           allure_report: allure-report
           allure_history: allure-history

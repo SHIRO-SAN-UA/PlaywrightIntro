@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { HomePage } from "../pages/home.page";
 
 test.describe("Page title check", async () => {
-    test.only("Check if the main page has the correct title", async ({ page }) => {
+    test("Check if the main page has the correct title", async ({ page }) => {
         const homePage = new HomePage(page);
         await homePage.navigateToHomePage();
 
