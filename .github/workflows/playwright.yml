@@ -40,18 +40,17 @@ jobs:
         run: npx playwright test
         continue-on-error: true
 
-      - name: Create and Switch to allure-report Branch
-        run: git checkout -b allure-report
+      # - name: Create and Switch to allure-report Branch
+      #   run: git checkout -b allure-report
       
-      - name: Push allure-report Branch to Remote
-        run: git push --set-upstream origin allure-report
+      
+      - name: Generate Allure Report
+        run: |
+          npx allure generate --clean -o allure-report-$TIMESTAMP
+      # mv allure-report-$TIMESTAMP $GITHUB_WORKSPACE/allure-report
 
-
-        
-      # - name: Generate Allure Report
-      #   run: |
-      #     npx allure generate --clean -o allure-report-$TIMESTAMP
-      #     mv allure-report-$TIMESTAMP $GITHUB_WORKSPACE/allure-report
+      # - run: git push --set-upstream origin allure-report
+      
 
       # - name: Commit and Push Allure Report
       #   run: |
@@ -61,3 +60,14 @@ jobs:
       #     git push origin allure-report
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pushes to another repository
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.MY_SECRET_CAT}}
+        with:
+          source-directory: 'allure-report-$TIMESTAMP'
+          destination-github-username: 'SHIRO-SAN-UA'
+          destination-repository-name: 'PlaywrightIntro'
+          user-email: serge.karpov@gmail.com
+          target-branch: allure-report
