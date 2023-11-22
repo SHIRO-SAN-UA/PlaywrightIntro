@@ -31,12 +31,12 @@ jobs:
 
       - name: Create new branch and push changes
         run: |
+          git config --global user.email "serge.karpov@gmail.com"
+          git config --global user.name "SK"
           git checkout -b gh-pages
           git add .
           git commit -m "Add Allure report"
           git push origin gh-pages
-          git config --global user.email "serge.karpov@gmail.com"
-          git config --global user.name "SK"
           env:
             PERSONAL_TOKEN: ${{ secrets.MY_SECRET_CAT }}
 
