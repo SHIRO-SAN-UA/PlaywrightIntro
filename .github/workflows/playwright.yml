@@ -35,6 +35,8 @@ jobs:
           git add .
           git commit -m "Add Allure report"
           git push origin gh-pages
+          env:
+            PERSONAL_TOKEN: ${{ secrets.MY_SECRET_CAT }}
 
       - name: Generate Allure Report
         run: npx allure generate --clean
