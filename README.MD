@@ -22,9 +22,7 @@ HTML Reporting system is hosted at [Github Pages](https://shiro-san-ua.github.io
 
 1.  Install Node.js.
 1.  Run `git clone https://github.com/SHIRO-SAN-UA/PlaywrightIntro` to clone repository.
-1.  Run `npm init playwright@latest` to install Playwright and dependencies.
-1.  Run `npm install -- save-dev allure-commandline allure-playwright` install Allure report and dependencies.
-1.  Run `npm install @faker-js/faker --save-dev` to install Faker and dependencies.
+1.  Run `npm install ci to install dependencies.
 
 ### How to run tests
 
